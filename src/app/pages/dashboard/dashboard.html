@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <div class="row">
+
+
+    
+    <!-- Left Sidebar -->
+    <div class="col-md-3 bg-light vh-100 p-3 position-sticky top-0">
+      <div class="text-center mb-4">
+        <img [src]="employee.photo" class="rounded-circle mb-2" width="120" height="120" alt="Employee Photo">
+        <h5>{{ employee.name }}</h5>
+        <p class="text-muted">{{ employee.position }}</p>
+                <p class="text-muted">{{ employee.department }}</p>
+
+                        <p class="text-muted">{{ employee.contract }}</p>
+
+      </div>
+
+      <ul class="nav nav-pills flex-column" role="tablist">
+        <li class="nav-item mb-2">
+          <button class="nav-link" [class.active]="activeTab() === 'apply'" (click)="selectTab('apply')">Apply Leave</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab() === 'history'" (click)="selectTab('history')">Leave History</button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Right Content -->
+    <div class="col-md-9 p-3">
+      <div *ngIf="activeTab() === 'apply'">
+        <app-leave-apply (leaveApplied)="addLeave($event)"></app-leave-apply>
+      </div>
+      <div *ngIf="activeTab() === 'history'">
+        <app-leave-history (leaves)="leaves"></app-leave-history>
+      </div>
+    </div>
+
+  </div>
+</div>
+ 

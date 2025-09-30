@@ -1,0 +1,32 @@
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm mx-auto" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Leave Application</h2>
+    <form [formGroup]="leaveForm" (ngSubmit)="applyLeave()">
+      
+      <div class="mb-3">
+        <label for="leaveType" class="form-label">Leave Type</label>
+        <select id="leaveType" class="form-select" formControlName="leaveType">
+          <option value="">Select Leave Type</option>
+          <option *ngFor="let type of leaveTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="fromDate" class="form-label">From</label>
+        <input type="date" class="form-control" id="fromDate" formControlName="fromDate">
+      </div>
+
+      <div class="mb-3">
+        <label for="toDate" class="form-label">To</label>
+        <input type="date" class="form-control" id="toDate" formControlName="toDate">
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="4" formControlName="description" placeholder="Reason for leave..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Apply</button>
+    </form>
+  </div>
+</div>

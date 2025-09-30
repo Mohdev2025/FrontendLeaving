@@ -1,0 +1,30 @@
+.vh-100 {
+  min-height: 100vh;
+}
+
+img {
+  border: 3px solid #0d6efd;
+}
+
+
+
+
+.nav-pills .nav-link {
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.card {
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+h5 {
+  font-weight: 600;
+}

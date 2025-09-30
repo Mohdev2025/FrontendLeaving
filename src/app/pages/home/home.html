@@ -1,0 +1,99 @@
+ <div class="container mt-5">
+  <!-- Welcome Section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4">Welcome to the Leave Management System</h1>
+    <p class="lead text-muted">Easily apply, manage, and approve leave requests.</p>
+
+    <!-- Multi-Card Carousel -->
+    <div class="carousel-wrapper mb-4">
+      <div class="carousel-track">
+        <!-- 5 Image Cards -->
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=1" alt="img1"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=2" alt="img2"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=3" alt="img3"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=4" alt="img4"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=5" alt="img5"></div>
+        <!-- Duplicate for infinite loop effect -->
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=1" alt="img1"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=2" alt="img2"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=3" alt="img3"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=4" alt="img4"></div>
+        <div class="carousel-card"><img src="https://picsum.photos/250/150?random=5" alt="img5"></div>
+      </div>
+    </div>
+
+    <!-- Apply Button -->
+    <a routerLink="/Login" class="btn btn-primary btn-lg mt-3">Apply for Leave</a>
+
+    <!-- Current Leaves Table -->
+    <div class="mt-5">
+      <h3 class="mb-3">Employees on Leave</h3>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle shadow-sm">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Employee</th>
+              <th scope="col">Department</th>
+              <th scope="col">Leave Start</th>
+              <th scope="col">Return Date</th>
+              <th scope="col">Days Left</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="https://i.pravatar.cc/40?img=12" class="rounded-circle me-2"> Sarah Ahmed</td>
+              <td>HR</td>
+              <td>2025-09-18</td>
+              <td>2025-09-25</td>
+              <td><span class="badge bg-warning text-dark">4 days</span></td>
+            </tr>
+            <tr>
+              <td><img src="https://i.pravatar.cc/40?img=32" class="rounded-circle me-2"> Ali Hassan</td>
+              <td>IT</td>
+              <td>2025-09-20</td>
+              <td>2025-09-24</td>
+              <td><span class="badge bg-danger">2 days</span></td>
+            </tr>
+            <tr>
+              <td><img src="https://i.pravatar.cc/40?img=47" class="rounded-circle me-2"> Mariam Said</td>
+              <td>Finance</td>
+              <td>2025-09-15</td>
+              <td>2025-09-22</td>
+              <td><span class="badge bg-success">1 day</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Cards -->
+  <div class="row text-center">
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title">Pending Requests</h5>
+          <p class="card-text display-6 text-warning">5</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title">Approved Leaves</h5>
+          <p class="card-text display-6 text-success">12</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title">Rejected Requests</h5>
+          <p class="card-text display-6 text-danger">3</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
