@@ -15,18 +15,22 @@
         <tbody>
           <tr *ngFor="let leave of leaves">
             <td>{{ leave.leaveType }}</td>
-            <td>{{ leave.fromDate }}</td>
-            <td>{{ leave.toDate }}</td>
+
+            <!-- عرض التاريخ بدون وقت -->
+            <td>{{ leave.fromDate | date:'yyyy-MM-dd' }}</td>
+            <td>{{ leave.toDate | date:'yyyy-MM-dd' }}</td>
+
             <td>
               <span 
-                class="badge"
-                [ngClass]="{
-                  'bg-warning text-dark': leave.status === 'Pending',
-                  'bg-success': leave.status === 'Approved',
-                  'bg-danger': leave.status === 'Rejected'
-                }">
-                {{ leave.status }}
-              </span>
+              class="badge"
+              [ngClass]="{
+                'bg-primary-subtle text-primary': leave.status === 'Requested',
+                'bg-success-subtle text-success': leave.status === 'Approved',
+                'bg-warning-subtle text-warning': leave.status === 'Cancelled',
+                'bg-danger-subtle text-danger': leave.status === 'Rejected'
+              }">
+              {{ leave.status }}
+            </span>
             </td>
           </tr>
         </tbody>
