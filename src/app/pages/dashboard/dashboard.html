@@ -12,19 +12,31 @@
       </div>
 
       <ul class="nav nav-pills flex-column" role="tablist">
+        <!-- زر طلب إجازة -->
         <li class="nav-item mb-2">
           <button class="nav-link" [class.active]="activeTab() === 'apply'" (click)="selectTab('apply')">
-            Apply Leave
+            📋 Apply Leave
           </button>
         </li>
+        
+        <!-- زر طلب استئذان -->
+        <li class="nav-item mb-2">
+          <button class="nav-link" [class.active]="activeTab() === 'permission'" (click)="selectTab('permission')">
+            ⏰ Apply Permission
+          </button>
+        </li>
+
+        <!-- زر السجل -->
         <li class="nav-item mb-2">
           <button class="nav-link" [class.active]="activeTab() === 'history'" (click)="selectTab('history')">
-            Leave History
+            📜 Leave History
           </button>
         </li>
+
+        <!-- زر تسجيل الخروج -->
         <li class="nav-item mt-4">
           <button class="btn btn-danger w-100" (click)="logout()">
-            Logout
+            🚪 Logout
           </button>
         </li>
       </ul>
@@ -32,12 +44,22 @@
 
     <!-- Main Content -->
     <div class="col-md-9 p-3">
+      
+      <!-- صفحة طلب إجازة -->
       <div *ngIf="activeTab() === 'apply'">
         <app-leave-apply (leaveApplied)="addLeave($event)"></app-leave-apply>
       </div>
+
+      <!-- صفحة طلب استئذان -->
+      <div *ngIf="activeTab() === 'permission'">
+        <app-permission-apply (permissionApplied)="addPermission($event)"></app-permission-apply>
+      </div>
+
+      <!-- صفحة السجل -->
       <div *ngIf="activeTab() === 'history'">
         <app-leave-history [leaves]="leaves()"></app-leave-history>
       </div>
+
     </div>
 
   </div>

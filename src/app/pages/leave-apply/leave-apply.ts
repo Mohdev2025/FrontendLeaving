@@ -69,7 +69,7 @@ export class LeaveApplyComponent implements OnInit {
 
     const newLeave: Leave = {
       ...this.leaveForm.value,
-      status: 'Cancelled',
+      status: 'Requested',
       userId: user.id
     };
 

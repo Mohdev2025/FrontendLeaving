@@ -1,41 +1,79 @@
-<div class="card shadow-sm border-0">
+<!-- LEAVE HISTORY -->
+<div class="card mb-4">
+  <div class="card-header"><h4>Leave History</h4></div>
   <div class="card-body">
-    <h4 class="card-title mb-3">Leave History</h4>
-
-    <div class="table-responsive">
-      <table class="table align-middle table-hover">
-        <thead class="table-light">
+    <div *ngIf="leaves.length === 0" class="alert alert-info">
+      No leave applications found.
+    </div>
+    <div *ngIf="leaves.length > 0" class="table-responsive">
+      <table class="table table-hover">
+        <thead>
           <tr>
-            <th scope="col">Leave Type</th>
-            <th scope="col">From</th>
-            <th scope="col">To</th>
-            <th scope="col">Status</th>
+            <th>Type</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+            <th *ngIf="isManager()">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let leave of leaves">
             <td>{{ leave.leaveType }}</td>
-
-            <!-- عرض التاريخ بدون وقت -->
-            <td>{{ leave.fromDate | date:'yyyy-MM-dd' }}</td>
-            <td>{{ leave.toDate | date:'yyyy-MM-dd' }}</td>
-
-            <td>
-              <span 
-              class="badge"
-              [ngClass]="{
-                'bg-primary-subtle text-primary': leave.status === 'Requested',
-                'bg-success-subtle text-success': leave.status === 'Approved',
-                'bg-warning-subtle text-warning': leave.status === 'Cancelled',
-                'bg-danger-subtle text-danger': leave.status === 'Rejected'
-              }">
-              {{ leave.status }}
-            </span>
+            <td>{{ leave.fromDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ leave.toDate | date:'dd/MM/yyyy' }}</td>
+            <td><span [class]="getStatusClass(leave.status)">{{ leave.status }}</span></td>
+            <td *ngIf="isManager()">
+              <button class="btn btn-success btn-sm"
+                      (click)="leave.id && updateLeaveStatus(leave.id, 'Approved')"
+                      [disabled]="!leave.id || leave.status === 'Approved' || updatingLeaveId === leave.id">✓</button>
+              <button class="btn btn-danger btn-sm"
+                      (click)="leave.id && updateLeaveStatus(leave.id, 'Rejected')"
+                      [disabled]="!leave.id || leave.status === 'Rejected' || updatingLeaveId === leave.id">✗</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+  </div>
+</div>
 
+<!-- PERMISSION HISTORY -->
+<div class="card">
+  <div class="card-header"><h4>Permission History</h4></div>
+  <div class="card-body">
+    <div *ngIf="permissions.length === 0" class="alert alert-info">
+      No permission applications found.
+    </div>
+    <div *ngIf="permissions.length > 0" class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Date</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+            <th *ngIf="isManager()">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let perm of permissions">
+            <td>{{ perm.permissionType }}</td>
+            <td>{{ perm.date | date:'dd/MM/yyyy' }}</td>
+            <td>{{ perm.from }}</td>
+            <td>{{ perm.to }}</td>
+            <td><span [class]="getStatusClass(perm.status)">{{ perm.status }}</span></td>
+            <td *ngIf="isManager()">
+              <button class="btn btn-success btn-sm"
+                      (click)="perm.id && updatePermissionStatus(perm.id, 'Approved')"
+                      [disabled]="!perm.id || perm.status === 'Approved' || updatingPermissionId === perm.id">✓</button>
+              <button class="btn btn-danger btn-sm"
+                      (click)="perm.id && updatePermissionStatus(perm.id, 'Rejected')"
+                      [disabled]="!perm.id || perm.status === 'Rejected' || updatingPermissionId === perm.id">✗</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

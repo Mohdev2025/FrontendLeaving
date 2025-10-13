@@ -1,0 +1,100 @@
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm mx-auto" style="max-width: 600px;">
+      <h2 class="text-center mb-4">Hourly Permission Request</h2>
+  
+      <form [formGroup]="permissionForm" (ngSubmit)="applyPermission()">
+        
+        <!-- Permission Type -->
+        <div class="mb-3">
+          <label for="permissionType" class="form-label">Permission Type</label>
+          <select id="permissionType" class="form-select" formControlName="permissionType">
+            <option value="">Select Permission Type</option>
+            <option value="before-work">Before Work</option>
+            <option value="during-work">During Work</option>
+            <option value="leave-early">Leave Early</option>
+          </select>
+          <small class="text-muted d-block mt-1">
+            <span *ngIf="permissionForm.get('permissionType')?.value === 'before-work'">
+              ⏰ Late arrival before starting work hours
+            </span>
+            <span *ngIf="permissionForm.get('permissionType')?.value === 'during-work'">
+              🕐 Leaving and returning during work hours
+            </span>
+            <span *ngIf="permissionForm.get('permissionType')?.value === 'leave-early'">
+              🚪 Leaving before the end of work hours
+            </span>
+          </small>
+        </div>
+  
+        <!-- Date -->
+        <div class="mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="date" 
+            formControlName="date"
+            [min]="getCurrentDate()">
+        </div>
+  
+        <div class="row">
+          <!-- From Time -->
+          <div class="col-md-6 mb-3">
+            <label for="fromTime" class="form-label">From</label>
+            <input 
+              type="time" 
+              class="form-control" 
+              id="fromTime" 
+              formControlName="fromTime">
+          </div>
+  
+          <!-- To Time -->
+          <div class="col-md-6 mb-3">
+            <label for="toTime" class="form-label">To</label>
+            <input 
+              type="time" 
+              class="form-control" 
+              id="toTime" 
+              formControlName="toTime">
+          </div>
+        </div>
+  
+        <!-- Display Calculated Duration -->
+        <div class="alert alert-info mb-3" *ngIf="calculatedDuration > 0">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-clock me-2"></i>
+            <div>
+              <strong>Duration:</strong> {{ calculatedDuration | number:'1.1-1' }} hours
+              <small class="d-block">
+                ({{ calculatedDuration * 60 | number:'1.0-0' }} minutes)
+              </small>
+            </div>
+          </div>
+        </div>
+  
+        <div class="alert alert-warning mb-3" *ngIf="calculatedDuration <= 0 && permissionForm.get('fromTime')?.value && permissionForm.get('toTime')?.value">
+          ⚠️ End time must be after start time
+        </div>
+  
+        <!-- Reason -->
+        <div class="mb-3">
+          <label for="reason" class="form-label">Reason</label>
+          <textarea 
+            class="form-control" 
+            id="reason" 
+            rows="4" 
+            formControlName="reason" 
+            placeholder="State the reason for the permission...">
+          </textarea>
+        </div>
+  
+        <button 
+          type="submit" 
+          class="btn btn-primary w-100"
+          [disabled]="!permissionForm.valid || calculatedDuration <= 0">
+          Submit Request
+        </button>
+      </form>
+    </div>
+  </div>
+  

@@ -1,37 +1,56 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Permission } from '../Models/permission.model';
 
 @Injectable({ providedIn: 'root' })
 export class LeaveService {
-  private baseUrl = 'http://localhost:8047/api/leave';
+  private baseUrl = 'http://localhost:8047/api';
 
   constructor(private http: HttpClient) {}
 
-  // الهيدر مع التوكن المخزن
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json',
+      Authorization: token ? `Bearer ${token}` : ''
     });
   }
 
-  // جلب كل الإجازات مع نوع الإجازة
+  // ---------------- LEAVES ----------------
   getAllLeavesWithType(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/all-with-type`, {
+    return this.http.get(`${this.baseUrl}/leave/all-with-type`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  getLeaveTypes(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/types`, {
+  updateLeaveStatus(leaveId: string, status: string): Observable<any> {
+    return this.http.patch(
+      `${this.baseUrl}/leave/update-status/${leaveId}`,
+      { status },
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // ---------------- PERMISSIONS ----------------
+  getPermissionsByUser(userId: string): Observable<Permission[]> {
+    return this.http.get<Permission[]>(`${this.baseUrl}/permission/user/${userId}`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  applyLeave(payload: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/apply`, payload, {
+  getAllPermissions(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/permission/all`, {
       headers: this.getAuthHeaders()
     });
+  }
+
+  // ✅ PATCH method to update permission status
+  updatePermissionStatus(permissionId: string, status: string): Observable<any> {
+    return this.http.patch(
+      `${this.baseUrl}/permission/update-status/${permissionId}`,
+      { status },
+      { headers: this.getAuthHeaders() }
+    );
   }
 }
