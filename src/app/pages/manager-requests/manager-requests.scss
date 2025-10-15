@@ -1,0 +1,64 @@
+/* ===== Statistics Cards ===== */
+.stat-card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    color: #000;
+  
+    &.pending-card {
+      background-color: #fff8b3; // أصفر فاتح
+    }
+  
+    &.approved-card {
+      background-color: #b3f0d6; // أخضر فاتح
+    }
+  
+    &.rejected-card {
+      background-color: #f8b3b3; // أحمر فاتح
+    }
+  
+    .card-title {
+      font-weight: 600;
+    }
+  }
+  
+  /* ===== Request Badges ===== */
+  .request-card {
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+  
+    .badge {
+      font-size: 0.85rem;
+      font-weight: 500;
+  
+      &.bg-info {
+        background-color: #cce5ff !important; // أزرق فاتح للـ Leave
+        color: #084298;
+      }
+  
+      &.bg-warning {
+        background-color: #fff3cd !important; // أصفر فاتح للـ Permission
+        color: #856404;
+      }
+  
+      &.bg-success {
+        background-color: #d1e7dd !important; // أخضر فاتح للحالة Approved
+        color: #0f5132;
+      }
+  
+      &.bg-danger {
+        background-color: #f8d7da !important; // أحمر فاتح للحالة Rejected
+        color: #842029;
+      }
+    }
+  
+    .card-body {
+      padding: 1rem 1.5rem;
+    }
+  }
+  
+  /* ===== Buttons Active ===== */
+  .btn-group .btn.active {
+    border-width: 2px;
+    font-weight: 600;
+  }
+  

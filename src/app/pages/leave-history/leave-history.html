@@ -13,7 +13,6 @@
             <th>From</th>
             <th>To</th>
             <th>Status</th>
-            <th *ngIf="isManager()">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -22,14 +21,6 @@
             <td>{{ leave.fromDate | date:'dd/MM/yyyy' }}</td>
             <td>{{ leave.toDate | date:'dd/MM/yyyy' }}</td>
             <td><span [class]="getStatusClass(leave.status)">{{ leave.status }}</span></td>
-            <td *ngIf="isManager()">
-              <button class="btn btn-success btn-sm"
-                      (click)="leave.id && updateLeaveStatus(leave.id, 'Approved')"
-                      [disabled]="!leave.id || leave.status === 'Approved' || updatingLeaveId === leave.id">✓</button>
-              <button class="btn btn-danger btn-sm"
-                      (click)="leave.id && updateLeaveStatus(leave.id, 'Rejected')"
-                      [disabled]="!leave.id || leave.status === 'Rejected' || updatingLeaveId === leave.id">✗</button>
-            </td>
           </tr>
         </tbody>
       </table>
@@ -53,7 +44,6 @@
             <th>From</th>
             <th>To</th>
             <th>Status</th>
-            <th *ngIf="isManager()">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -63,14 +53,6 @@
             <td>{{ perm.from }}</td>
             <td>{{ perm.to }}</td>
             <td><span [class]="getStatusClass(perm.status)">{{ perm.status }}</span></td>
-            <td *ngIf="isManager()">
-              <button class="btn btn-success btn-sm"
-                      (click)="perm.id && updatePermissionStatus(perm.id, 'Approved')"
-                      [disabled]="!perm.id || perm.status === 'Approved' || updatingPermissionId === perm.id">✓</button>
-              <button class="btn btn-danger btn-sm"
-                      (click)="perm.id && updatePermissionStatus(perm.id, 'Rejected')"
-                      [disabled]="!perm.id || perm.status === 'Rejected' || updatingPermissionId === perm.id">✗</button>
-            </td>
           </tr>
         </tbody>
       </table>

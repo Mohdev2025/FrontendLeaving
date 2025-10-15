@@ -44,6 +44,11 @@ export class LeaveService {
       headers: this.getAuthHeaders()
     });
   }
+  getLeavesByUser(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/leave/my-leaves/${userId}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 
   // ✅ PATCH method to update permission status
   updatePermissionStatus(permissionId: string, status: string): Observable<any> {

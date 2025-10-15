@@ -70,7 +70,8 @@ export class LeaveApplyComponent implements OnInit {
     const newLeave: Leave = {
       ...this.leaveForm.value,
       status: 'Requested',
-      userId: user.id
+      userId: user.id,
+      name: user.name
     };
 
     const apiUrl = 'http://localhost:8047/api/leave/apply';

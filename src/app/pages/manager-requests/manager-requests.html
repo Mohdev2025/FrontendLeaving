@@ -1,1 +1,152 @@
-<p>manager-requests works!</p>
+<div class="manager-requests-container p-4">
+  <h2 class="mb-4">📋 Manage Team Requests</h2>
+
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-md-4 mb-3">
+      <div class="card stat-card pending-card">
+        <div class="card-body">
+          <h5 class="card-title">⏳ Pending</h5>
+          <p class="card-text display-4">{{ getPendingCount() }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card stat-card approved-card">
+        <div class="card-body">
+          <h5 class="card-title">✅ Approved</h5>
+          <p class="card-text display-4">{{ getApprovedCount() }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card stat-card rejected-card">
+        <div class="card-body">
+          <h5 class="card-title">❌ Rejected</h5>
+          <p class="card-text display-4">{{ getRejectedCount() }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Buttons -->
+  <div class="mb-4">
+    <div class="btn-group" role="group">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary"
+        [class.active]="filterStatus() === 'all'"
+        (click)="setFilter('all')">
+        All Requests
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-outline-warning"
+        [class.active]="filterStatus() === 'pending'"
+        (click)="setFilter('pending')">
+        Pending
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-outline-success"
+        [class.active]="filterStatus() === 'approved'"
+        (click)="setFilter('approved')">
+        Approved
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-outline-danger"
+        [class.active]="filterStatus() === 'rejected'"
+        (click)="setFilter('rejected')">
+        Rejected
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading()" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Requests List -->
+  <div *ngIf="!isLoading()" class="requests-list">
+    <div *ngIf="filteredRequests().length === 0" class="alert alert-info">
+      No requests found for the selected filter.
+    </div>
+
+    <div *ngFor="let request of filteredRequests()" class="card mb-3 request-card">
+      <div class="card-body">
+        <div class="row align-items-center">
+          
+          <!-- Request Info -->
+          <div class="col-md-8">
+            <div class="d-flex align-items-center mb-2">
+              <h5 class="mb-0 me-3">{{ request.employeeName }}</h5>
+              <span 
+                class="badge" 
+                [class.bg-warning]="request.type === 'permission'"
+                [class.bg-info]="request.type === 'leave'">
+                {{ request.type === 'leave' ? '🏖️ Leave' : '⏰ Permission' }}
+              </span>
+              <span 
+                class="badge ms-2"
+                [class.bg-warning]="request.status === 'pending'"
+                [class.bg-success]="request.status === 'approved'"
+                [class.bg-danger]="request.status === 'rejected'">
+                {{ request.status | titlecase }}
+              </span>
+            </div>
+
+            <!-- Leave Details -->
+            <div *ngIf="request.type === 'leave'" class="mb-2">
+              <p class="mb-1">
+                <strong>📅 Duration:</strong> 
+                {{ request.startDate }} to {{ request.endDate }}
+              </p>
+            </div>
+
+            <!-- Permission Details -->
+            <div *ngIf="request.type === 'permission'" class="mb-2">
+              <p class="mb-1">
+                <strong>📅 Date:</strong> {{ request.permissionDate }}
+              </p>
+              <p class="mb-1">
+                <strong>⏱️ Duration:</strong> {{ request.permissionTime }}
+              </p>
+            </div>
+
+            <p class="mb-1">
+              <strong>📝 Reason:</strong> {{ request.reason }}
+            </p>
+            <p class="text-muted mb-0">
+              <small>Submitted on: {{ request.submittedDate }}</small>
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="col-md-4 text-end">
+            <div *ngIf="request.status === 'pending'" class="d-grid gap-2">
+              <button 
+                class="btn btn-success"
+                (click)="approveRequest(request)">
+                ✅ Approve
+              </button>
+              <button 
+                class="btn btn-danger"
+                (click)="rejectRequest(request)">
+                ❌ Reject
+              </button>
+            </div>
+            <div *ngIf="request.status !== 'pending'" class="alert alert-secondary mb-0">
+              Request {{ request.status }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,53 +1,62 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { LeaveApplyComponent } from '../leave-apply/leave-apply';
 import { LeaveHistoryComponent } from '../leave-history/leave-history';
-import { PermissionApplyComponent } from '../permission-apply/permission-apply'; // أضف هذا
+import { PermissionApplyComponent } from '../permission-apply/permission-apply';
+import { ManagerRequestsComponent } from '../manager-requests/manager-requests';
+
 import { Leave } from '../../Models/leave.model';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule, 
-    LeaveApplyComponent, 
+    CommonModule,
+    LeaveApplyComponent,
     LeaveHistoryComponent,
-    PermissionApplyComponent  // أضف هذا
+    PermissionApplyComponent,
+    ManagerRequestsComponent
   ],
-  templateUrl: './dashboard.html',
+  templateUrl:'./dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
 export class DashboardComponent implements OnInit {
 
+  activeTab = signal<'apply' | 'history' | 'permission' | 'manager'>('apply');
   leaves = signal<Leave[]>([]);
-  activeTab = signal<'apply' | 'history' | 'permission'>('apply');
+  employee = { name:'', position:'', department:'', contract:'', photo:'assets/profile.png' };
+  isManager = false;
+  userId: string = '';
 
-  employee = {
-    name: '',
-    position: '',
-    department: '',
-    contract: '',
-    photo: 'https://i.pravatar.cc/150?img=2'
-  };
-
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const user = JSON.parse(storedUser);
+  
+      this.userId = user.id;
+  
+      // Map API fields including employeeImage
       this.employee = {
-        ...this.employee,
         name: user.name || '',
-        contract: user.contracttype || ''
+        position: user.position || '',
+        department: user.department || '—',
+        contract: user.contracttype || '—',
+        photo: user.employeeImage || 'assets/profile.png' // <-- use API image here
       };
+  
+      this.isManager = user.role === 'Manager' || user.position === 'Manager';
+  
+      if (this.isManager) this.activeTab.set('manager');
     }
   }
+  
 
-  selectTab(tab: 'apply' | 'history' | 'permission') {
+  selectTab(tab: 'apply' | 'history' | 'permission' | 'manager') {
     this.activeTab.set(tab);
   }
 
@@ -57,26 +66,21 @@ export class DashboardComponent implements OnInit {
   }
 
   addPermission(newPermission: any) {
-    // يمكنك التعامل مع الـ permission هنا
-    console.log('New permission:', newPermission);
     this.activeTab.set('history');
   }
 
-  logout(): void {
+  logout() {
     const token = localStorage.getItem('authToken');
-    this.http.post('http://localhost:8047/api/auth/logout', {}, {
-      headers: { Authorization: token || '' }
-    }).subscribe({
-      next: () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('authToken');
-        this.router.navigate(['/login']);
-      },
-      error: () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('authToken');
-        this.router.navigate(['/login']);
-      }
-    });
+    this.http.post('http://localhost:8047/api/auth/logout', {}, { headers: { Authorization: token || '' } })
+      .subscribe({
+        next: () => this.clearAndNavigate(),
+        error: () => this.clearAndNavigate()
+      });
+  }
+
+  private clearAndNavigate() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
   }
 }

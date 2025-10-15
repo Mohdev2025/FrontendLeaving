@@ -86,6 +86,7 @@ export class PermissionApplyComponent implements OnInit {
       from: this.permissionForm.value.fromTime,
       to: this.permissionForm.value.toTime,
       reason: this.permissionForm.value.reason,
+      name:user.name,
       userId: user.id
     };
 

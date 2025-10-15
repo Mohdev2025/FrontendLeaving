@@ -12,32 +12,28 @@ import { Permission } from '../../Models/permission.model';
   styleUrls: ['./leave-history.scss']
 })
 export class LeaveHistoryComponent implements OnInit {
-  @Input() leaves: Leave[] = [];
+  @Input() userId: string = ''; // للفلترة حسب المستخدم
+  leaves: Leave[] = [];
   permissions: Permission[] = [];
-  userRole: string = '';
   updatingLeaveId: string | null = null;
   updatingPermissionId: string | null = null;
 
   constructor(private leaveService: LeaveService) {}
 
   ngOnInit() {
-    const storedUser = localStorage.getItem('user');
-    if (!storedUser) return;
+    if (!this.userId) {
+      const storedUser = localStorage.getItem('user');
+      if (!storedUser) return;
+      const user = JSON.parse(storedUser);
+      this.userId = user.id;
+    }
 
-    const user = JSON.parse(storedUser);
-    this.userRole = user.role || '';
-
-    // Load leaves if empty
-    if (this.leaves.length === 0) this.loadLeaves();
-
-    // Load permissions
-    if (this.isManager()) this.loadAllPermissions();
-    else this.loadPermissions(user.id);
+    this.loadLeavesByUser(this.userId);
+    this.loadPermissionsByUser(this.userId);
   }
 
-  // -------------------- LEAVES --------------------
-  loadLeaves() {
-    this.leaveService.getAllLeavesWithType().subscribe({
+  loadLeavesByUser(userId: string) {
+    this.leaveService.getLeavesByUser(userId).subscribe({
       next: (data: any[]) => {
         this.leaves = data.map((leave: any) => ({
           id: leave.id || '',
@@ -49,39 +45,15 @@ export class LeaveHistoryComponent implements OnInit {
           status: leave.fields['status'] || 'Pending'
         }));
       },
-      error: (err) => console.error('Error fetching leaves:', err)
+      error: (err) => console.error('Error fetching leaves by user:', err)
     });
   }
 
-  updateLeaveStatus(leaveId: string | undefined, newStatus: string) {
-    if (!leaveId) {
-      console.warn('Cannot update leave, ID is undefined');
-      return;
-    }
-
-    this.updatingLeaveId = leaveId;
-    console.log('Updating leave', leaveId, 'to', newStatus);
-
-    this.leaveService.updateLeaveStatus(leaveId, newStatus).subscribe({
-      next: () => {
-        const leave = this.leaves.find(l => l.id === leaveId);
-        if (leave) leave.status = newStatus;
-        this.updatingLeaveId = null;
-      },
-      error: (err) => {
-        console.error('Error updating leave status:', err);
-        alert('Failed to update leave status');
-        this.updatingLeaveId = null;
-      }
-    });
-  }
-
-  // -------------------- PERMISSIONS --------------------
-  loadPermissions(userId: string) {
+  loadPermissionsByUser(userId: string) {
     this.leaveService.getPermissionsByUser(userId).subscribe({
       next: (data: any[]) => {
         this.permissions = data.map((p: any) => ({
-          id: p.id || p.fields?.id || '',
+          id: p.id || '',
           permissionType: p.PermissionType || 'N/A',
           date: p.Date || '',
           from: p.From || '',
@@ -89,59 +61,8 @@ export class LeaveHistoryComponent implements OnInit {
           status: p.Status || 'Pending'
         }));
       },
-      error: (err) => {
-        console.error('Error fetching permissions:', err);
-        this.permissions = [];
-      }
+      error: (err) => console.error('Error fetching permissions by user:', err)
     });
-  }
-
-  loadAllPermissions() {
-    this.leaveService.getAllPermissions().subscribe({
-      next: (data: any[]) => {
-        this.permissions = data.map((p: any) => ({
-          id: p.id || p.fields?.id || '',
-          permissionType: p.PermissionType || 'N/A',
-          date: p.Date || '',
-          from: p.From || '',
-          to: p.To || '',
-          status: p.Status || 'Pending'
-        }));
-      },
-      error: (err) => {
-        console.error('Error fetching all permissions:', err);
-        this.permissions = [];
-      }
-    });
-  }
-
-  updatePermissionStatus(permissionId: string | undefined, newStatus: string) {
-    if (!permissionId) {
-      console.warn('Cannot update permission, ID is undefined');
-      return;
-    }
-
-    this.updatingPermissionId = permissionId;
-    console.log('Updating permission', permissionId, 'to', newStatus);
-
-    this.leaveService.updatePermissionStatus(permissionId, newStatus).subscribe({
-      next: (res: any) => {
-        const perm = this.permissions.find(p => p.id === permissionId);
-        if (perm) perm.status = newStatus;
-        this.updatingPermissionId = null;
-        console.log(res.message || 'Permission updated successfully');
-      },
-      error: (err) => {
-        console.error('Error updating permission status:', err);
-        alert('Failed to update permission status');
-        this.updatingPermissionId = null;
-      }
-    });
-  }
-
-  // -------------------- UTILS --------------------
-  isManager(): boolean {
-    return this.userRole.toLowerCase() === 'manager';
   }
 
   getStatusClass(status: string): string {
@@ -151,5 +72,31 @@ export class LeaveHistoryComponent implements OnInit {
       case 'pending': return 'badge bg-warning';
       default: return 'badge bg-secondary';
     }
+  }
+
+  updateLeaveStatus(leaveId: string | undefined, newStatus: string) {
+    if (!leaveId) return;
+    this.updatingLeaveId = leaveId;
+    this.leaveService.updateLeaveStatus(leaveId, newStatus).subscribe({
+      next: () => {
+        const leave = this.leaves.find(l => l.id === leaveId);
+        if (leave) leave.status = newStatus;
+        this.updatingLeaveId = null;
+      },
+      error: () => this.updatingLeaveId = null
+    });
+  }
+
+  updatePermissionStatus(permissionId: string | undefined, newStatus: string) {
+    if (!permissionId) return;
+    this.updatingPermissionId = permissionId;
+    this.leaveService.updatePermissionStatus(permissionId, newStatus).subscribe({
+      next: () => {
+        const perm = this.permissions.find(p => p.id === permissionId);
+        if (perm) perm.status = newStatus;
+        this.updatingPermissionId = null;
+      },
+      error: () => this.updatingPermissionId = null
+    });
   }
 }
