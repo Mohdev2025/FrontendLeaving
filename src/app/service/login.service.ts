@@ -10,7 +10,7 @@ export class LoginService {
   private baseUrl = 'http://localhost:8047/api/auth/login';
 
   constructor(private http: HttpClient) {
-    console.log('LoginService Initialized');
+   // console.log('LoginService Initialized');
   }
 
   login(credentials: any): Observable<any> {

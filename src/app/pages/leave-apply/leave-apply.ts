@@ -92,7 +92,7 @@ export class LeaveApplyComponent implements OnInit {
         alert('Leave Applied Successfully!');
         this.leaveApplied.emit(newLeave); // إرسالها للـ Dashboard
         this.leaveForm.reset();
-        console.log('API Response:', response);
+       // console.log('API Response:', response);
       });
   }
 }

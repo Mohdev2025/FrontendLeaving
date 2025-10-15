@@ -109,7 +109,7 @@ export class PermissionApplyComponent implements OnInit {
         this.permissionApplied.emit(apiPayload);
         this.permissionForm.reset();
         this.calculatedDuration = 0;
-        console.log('API Response:', response);
+      //  console.log('API Response:', response);
       });
   }
 

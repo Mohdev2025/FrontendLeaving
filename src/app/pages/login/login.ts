@@ -50,13 +50,13 @@ export class Login {
 
     // عرض البيانات المرسلة
     this.requestDetails = JSON.stringify(credentials, null, 2);
-    console.log('📤 Sending Request to:', 'http://localhost:8047/api/auth/login');
-    console.log('📤 Request Body:', credentials);
+   // console.log('📤 Sending Request to:', 'http://localhost:8047/api/auth/login');
+   // console.log('📤 Request Body:', credentials);
 
     this.loginService.login(credentials).subscribe({
       next: (response) => {
-        console.log('✅ Login Successful!');
-        console.log('📥 Response:', response);
+       // console.log('✅ Login Successful!');
+       // console.log('📥 Response:', response);
         
         this.isLoading = false;
         this.responseDetails = JSON.stringify(response, null, 2);
@@ -65,13 +65,13 @@ export class Login {
         // حفظ التوكن
         if (response.token) {
           localStorage.setItem('authToken', response.token);
-          console.log('🔑 Token saved:', response.token.substring(0, 20) + '...');
+         // console.log('🔑 Token saved:', response.token.substring(0, 20) + '...');
         }
         
         // حفظ بيانات المستخدم
         if (response.user) {
           localStorage.setItem('user', JSON.stringify(response.user));
-          console.log('👤 User saved:', response.user);
+         // console.log('👤 User saved:', response.user);
         }
         
 
@@ -114,7 +114,7 @@ export class Login {
 
   // دالة لاختبار الاتصال بالـ Backend
   testConnection(): void {
-    console.log('🔍 Testing Backend connection...');
+   // console.log('🔍 Testing Backend connection...');
     
     fetch('http://localhost:8047/api/auth/login', {
       method: 'POST',
@@ -127,12 +127,12 @@ export class Login {
       })
     })
     .then(response => {
-      console.log('✅ Backend is reachable!');
-      console.log('📊 Status:', response.status);
+     // console.log('✅ Backend is reachable!');
+      //console.log('📊 Status:', response.status);
       return response.json();
     })
     .then(data => {
-      console.log('📥 Response Data:', data);
+     // console.log('📥 Response Data:', data);
       alert('Backend connection successful! ✅');
     })
     .catch(error => {
